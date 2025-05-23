@@ -1,6 +1,6 @@
 import {asyncHandler} from "../utils/Async.handler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { User } from "../models/User.model.js";
+import { User } from "../models/user.model..js";
 import {uploadCloudinary} from "../utils/Clouinary.js";
 import { ApiRespose } from "../utils/ApiResponse.js";
 
@@ -18,10 +18,10 @@ const registerUser=asyncHandler(async(req,res)=>{
     // return response
 
     // 1. get user details from frontend
-    const {fullname,email,username,password}= req.body
-    console.log("email : ",email)
+    const {fullName,email,username,password}= req.body
+    // console.log("request.body: ",req.body)
 
-    if([fullname,email,username,password].some((field)=>field?.trim()==="")
+    if([fullName,email,username,password].some((field)=>field?.trim()==="")
     ){
         throw new ApiError("All fields are required",400)
     }
@@ -35,7 +35,7 @@ const registerUser=asyncHandler(async(req,res)=>{
 
     // 2. check if user already exists : username or email
 
-    const existUser= User.findOne({
+    const existUser=await User.findOne({
         $or:[{email},{username}]
     })
 
@@ -43,15 +43,27 @@ const registerUser=asyncHandler(async(req,res)=>{
         throw new ApiError("User with email or username already exists",409)
     }
 
+
+//    console.log("request.file",req.files)
     // 3. check for image ,check avtar
    const avatarLocalPath= req.files?.avatar[0]?.path;
+
+   let coverImageLocalPath;
+   if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length>0){
+    coverImageLocalPath= req.files.coverImage[0].path
+   }
+
 
    if(!avatarLocalPath){
     throw new ApiError("Avatar is required",400)
    }
+
+
+
+   
    
    // for coverImage
-   const coverImageLocalPath= req.files?.coverImage[0]?.path;
+//    const coverImageLocalPath= req.files?.coverImage[0]?.path;
 
 
 
@@ -72,12 +84,13 @@ const registerUser=asyncHandler(async(req,res)=>{
             coverImage:coverImage?.url||"",
             email,
             password,
-            username:username.tolowerCase(),
-            fullname,
+            username:username?username.toLowerCase():"",
+            fullName,
 
     })
+
     // 6. remove password and refresh token field  from response
-    const createdUser =await user.findById(user._id).select(
+    const createdUser =await User.findById(user._id).select(
         "-password -refreshToken"
     )
     // 7. check for user creation
