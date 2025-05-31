@@ -66,7 +66,7 @@ userSchema.methods.isPasswordMatched = async function (password){
 
 // jwt token generation 
 userSchema.methods.generateAccessToken = function(){
-    jwt.sign({
+   return jwt.sign({
         _id:this._id,
         email:this.email,
         username:this.username,
@@ -80,8 +80,8 @@ userSchema.methods.generateAccessToken = function(){
 }
 
 // refresh jwt token 
-userSchema.methods.generateRefreshToken = function(){
-     jwt.sign({
+userSchema.methods.generaterefreshToken = function(){
+  return jwt.sign({
      _id:this._id,
  },
  process.env.REFRESH_TOKEN_SECRET,
@@ -91,4 +91,5 @@ userSchema.methods.generateRefreshToken = function(){
 )
 
 }
+
 export const User = mongoose.model("User", userSchema);

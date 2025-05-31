@@ -8,6 +8,7 @@ class ApiError extends Error{
         super(message)
         this.statusCode=statusCode
         this.data=null
+        this.message=message
         this.success=false
         this.errors=errors
 
@@ -20,4 +21,13 @@ class ApiError extends Error{
     }
 }
 
-export {ApiError}
+class ApiSuccess {
+  constructor(statusCode = 200, message = "", data = null) {
+    this.statusCode = statusCode;
+    this.success = true;
+    this.message = message;
+    this.data = data;
+  }
+}
+
+export {ApiError, ApiSuccess};
