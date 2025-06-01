@@ -480,7 +480,7 @@ export {
   updateUserAvatar,
   updateUserCoverImage,
   getUserChannelProfile,
-  getWatchHistory
+  getWatchHistory,updateAccountDetails
 };
 
 // note : if res is not used then write _ in place of res
