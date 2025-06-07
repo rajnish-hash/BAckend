@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/Async.handler.js";
 import { ApiError } from "../utils/ApiError.js";
-import { User } from "../models/user.model..js";
+import { User } from "../models/user.model.js";
 
 export const verifyJWT = asyncHandler(async (req, res, next) => {
   const token =
@@ -9,7 +9,7 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
     req.header("Authorization")?.replace("Bearer ", "");
    console.log("Token from request:", token);
   if (!token) {
-    // No token provided
+    // No token provided 
     if (req.path === "/logout" || req.originalUrl.endsWith("/logout")) {
       return next(); // allow logout to proceed
     }
